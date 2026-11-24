@@ -11,10 +11,22 @@ const onScroll = () => {
 onScroll();
 window.addEventListener("scroll", onScroll, { passive: true });
 
+let lockedScroll = 0;
+
 const setMenu = (open) => {
   toggle.setAttribute("aria-expanded", String(open));
   nav.classList.toggle("is-open", open);
-  document.body.classList.toggle("menu-open", open);
+
+  if (open) {
+    lockedScroll = window.scrollY;
+    document.body.style.top = `-${lockedScroll}px`;
+    document.body.classList.add("menu-open");
+    return;
+  }
+
+  document.body.classList.remove("menu-open");
+  document.body.style.top = "";
+  window.scrollTo(0, lockedScroll);
 };
 
 toggle.addEventListener("click", () => {
